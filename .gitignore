@@ -1,0 +1,8 @@
+.env
+node_modules
+package-lock.json
+dist
+.DS_Store
+.vscode
+*.log
+src/documents/*.pdf
