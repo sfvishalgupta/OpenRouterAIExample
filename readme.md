@@ -1,4 +1,4 @@
-# 🧠 OpenRouter AI Examples with LangChain (Node.js + TypeScript)
+# 🧠 OpenRouter AI Examples (TypeScript)
 
 This repository showcases how to use [OpenRouter](https://openrouter.ai) for interacting with LLMs in a Node.js (TypeScript) environment using streaming, prompt templates, and document-based Q&A.
 
