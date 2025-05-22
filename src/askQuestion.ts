@@ -1,15 +1,13 @@
-import path from 'path';
 import readline from 'readline';
 import { askQuestion } from "./services/openRouterService";
 
-const docPath: string = path.join(__dirname, process.argv[2]);
-const question: string = process.argv[3] ?? null;
+const question: string = process.argv[2] ?? null;
 
 /**
  * This function is used to stream the response from OpenRouter API.
  */
 
-askQuestion(docPath, question, true).then(response => {
+askQuestion("", question, true).then(response => {
     const rl = readline.createInterface({
         input: response.data,
         crlfDelay: Infinity,

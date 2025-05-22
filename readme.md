@@ -34,7 +34,15 @@ Create a .env file in the src folder:
 OPEN_ROUTER_API_KEY=your_openrouter_api_key
 ```
 
-## Example 1: Ask a Question from a PDF
+## Example 1: Ask a Question
+
+Run the below Command
+
+```bash
+npx ts-node src/askQuestion.ts "tell me a joke"
+```
+
+## Example 2: Ask a Question from a PDF
 
 Place your pdf inside src/documents folder
 
