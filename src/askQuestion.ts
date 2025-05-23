@@ -7,7 +7,7 @@ const question: string = process.argv[2] ?? null;
  * This function is used to stream the response from OpenRouter API.
  */
 
-askQuestion("", question, true).then(response => {
+askQuestion("", question).then(response => {
     const rl = readline.createInterface({
         input: response.data,
         crlfDelay: Infinity,

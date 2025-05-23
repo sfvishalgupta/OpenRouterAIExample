@@ -5,13 +5,14 @@ import { ENV_VARIABLES } from "../environment";
 import { getDocumentContent } from "../utils";
 import { MakePostCall } from "./apiService";
 
-export const askQuestion = async (docPath: string, question: string, stream: boolean): Promise<any> => {
+export const askQuestion = async (docPath: string, question: string): Promise<any> => {
+    const stream: boolean = ENV_VARIABLES.STREAMING;
     if (question !== null) {
         let docContent = "";
         if (docPath.trim() !== "") {
             docContent = await getDocumentContent(docPath);
         }
-        const url = ENV_VARIABLES.OPEN_ROUTER_API_URL as string;
+        const url = `${ENV_VARIABLES.OPEN_ROUTER_API_URL}/chat/completions`;
         const headers = {
             Authorization: `Bearer ${ENV_VARIABLES.OPEN_ROUTER_API_KEY}`,
             'Content-Type': 'application/json',

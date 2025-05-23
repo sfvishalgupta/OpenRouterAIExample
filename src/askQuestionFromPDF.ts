@@ -5,11 +5,16 @@ import { askQuestion } from "./services/openRouterService";
 const docPath: string = path.join(__dirname, process.argv[2]);
 const question: string = process.argv[3] ?? null;
 
+if (!docPath || !question) {
+  console.error("Usage: npx ts-node src/askQuestionFromPDF.ts <pdfPath> <question>");
+  process.exit(1);
+}
+
 /**
  * This function is used to stream the response from OpenRouter API.
  */
 
-askQuestion(docPath, question, true).then(response => {
+askQuestion(docPath, question).then(response => {
     const rl = readline.createInterface({
         input: response.data,
         crlfDelay: Infinity,

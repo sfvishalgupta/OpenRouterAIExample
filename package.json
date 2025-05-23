@@ -19,10 +19,16 @@
   "homepage": "https://github.com/sfvishalgupta/OpenRouterAIExample#readme",
   "description": "",
   "dependencies": {
+    "@langchain/community": "^0.3.44",
+    "@langchain/core": "^0.3.57",
+    "@langchain/openai": "^0.5.11",
+    "@qdrant/js-client-rest": "^1.13.0",
     "axios": "^1.9.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "pdf-parse": "^1.1.1"
+    "langchain": "^0.3.27",
+    "pdf-parse": "^1.1.1",
+    "pino": "^9.7.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.2",

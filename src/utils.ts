@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 const pdf = require('pdf-parse');
 
-const ReadPDFDocument = async (filePath: string): Promise<string> => {
+export const ReadPDFDocument = async (filePath: string): Promise<string> => {
     if (fs.existsSync(filePath)) {
         const dataBuffer = fs.readFileSync(filePath);
         const data = await pdf(dataBuffer);
