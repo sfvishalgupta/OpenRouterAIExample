@@ -19,6 +19,7 @@
   "homepage": "https://github.com/sfvishalgupta/OpenRouterAIExample#readme",
   "description": "",
   "dependencies": {
+    "@huggingface/inference": "^2.8.1",
     "@langchain/community": "^0.3.44",
     "@langchain/core": "^0.3.57",
     "@langchain/openai": "^0.5.11",

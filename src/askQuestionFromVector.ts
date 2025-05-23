@@ -29,18 +29,23 @@ const run = async () => {
         modelName: ENV_VARIABLES.OPEN_ROUTER_MODEL,
         configuration: {
             baseURL: ENV_VARIABLES.OPEN_ROUTER_API_URL
-        }
+        },
+        temperature: 0,
     });
 
     const prompt = PromptTemplate.fromTemplate(
-        question + "\n\n{context}"
+        question+"\n\n"+
+        "Your answer should be strictly based on the content given in <context></context>. if you dont find answer within the given context simply say answer not found."
     );
+    
     const chain = RunnableSequence.from([
         {
             context: () => {
                 return '<context>' + context + '</context>';
             },
-            question: () => question,
+            question: () => {
+                return question;
+            }
         },
         prompt,  // takes { topic } → prompt string
         model,   // takes prompt → response
@@ -48,20 +53,14 @@ const run = async () => {
     ]);
 
     if (ENV_VARIABLES.STREAMING) {
-        const stream = await chain.stream({
-            context: "Your answer should be strictly based on the content given in <context></context>. if you dont find answer within the given context simply say answer not found. "
-        });
-
+        const stream = await chain.stream({});
         for await (const chunk of stream) {
             process.stdout.write(chunk.toString());
         }
     } else {
-        const response = await chain.invoke({
-            context: "Your answer should be strictly based on the content given in <context></context>. if you dont find answer within the given context simply say answer not found. "
-        });
+        const response = await chain.invoke({});
         console.log("🧠 LLM Output:", response);
     }
-
 };
 
 run();

@@ -1,6 +1,8 @@
 import { QdrantVectorStore } from "@langchain/community/vectorstores/qdrant";
 import { EmbeddingsInterface } from "@langchain/core/embeddings";
 import { FakeEmbeddings } from "langchain/embeddings/fake";
+// import { OpenAIEmbeddings } from "@langchain/openai";
+// import { HuggingFaceInferenceEmbeddings } from "@langchain/community/embeddings/hf";
 import { QdrantClient } from "@qdrant/js-client-rest";
 import { BaseVector } from "./baseVector";
 import { ENV_VARIABLES } from "../environment";
@@ -9,6 +11,10 @@ import { logger } from "../pino";
 export class QdrantVector implements BaseVector {
 
     getEmbeddings(): EmbeddingsInterface {
+        // return new HuggingFaceInferenceEmbeddings({
+        //     model: "nomic-ai/nomic-embed-text"
+        // });
+        // return new OpenAIEmbeddings();
         return new FakeEmbeddings({});
     }
 
@@ -26,8 +32,6 @@ export class QdrantVector implements BaseVector {
                 collectionName,
             }
         );
-
-
     }
 
     // 2. Setup LangChain vector store with Qdrant

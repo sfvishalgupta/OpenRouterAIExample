@@ -59,6 +59,9 @@ Place your pdf inside src/documents folder
 Run the below Command
 
 ```bash
+# Run below command to start Docker.
+docker run -p 6333:6333 -p 6334:6334 qdrant/qdrant
+
 npx ts-node src/syncDataToVectorDB.ts <pdfPath> <index_name>
 ```
 
@@ -78,3 +81,4 @@ npx ts-node src/askQuestionFromVector.ts <index_name> <question>
 
 📬 License
 MIT — feel free to use and adapt!
+
