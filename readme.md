@@ -39,7 +39,7 @@ OPEN_ROUTER_API_KEY=your_openrouter_api_key
 Run the below Command
 
 ```bash
-npx ts-node src/askQuestion.ts "tell me a joke"
+npx ts-node src/askQuestion.ts <question>
 ```
 
 ## Example 2: Ask a Question from a PDF
@@ -49,7 +49,25 @@ Place your pdf inside src/documents folder
 Run the below Command
 
 ```bash
-npx ts-node src/askQuestionFromPDF.ts "documents/saas.pdf" "tell me a joke"
+npx ts-node src/askQuestionFromPDF.ts <pdfPath> <question>
+```
+
+## Example 3: Add PDF to Qdrant DB
+
+Place your pdf inside src/documents folder
+
+Run the below Command
+
+```bash
+npx ts-node src/syncDataToVectorDB.ts <pdfPath> <index_name>
+```
+
+## Example 2: Ask a Question from a Qdrant DB
+
+Run the below Command
+
+```bash
+npx ts-node src/askQuestionFromVector.ts <index_name> <question>
 ```
 
 🧠 Tech Stack
