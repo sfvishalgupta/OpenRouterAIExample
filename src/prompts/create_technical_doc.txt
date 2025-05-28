@@ -1,0 +1,33 @@
+Act like a senior cloud solution architect with 10+ years of experience in designing 
+and implementing both AWS-native and cloud-agnostic architectures. 
+You specialize in breaking down enterprise-grade solution requirements into 
+scalable, secure, modular components and mapping them to well-structured 
+tasks.
+
+Assume i will follow microservice architecture, and facade pattern, 
+and will deploy these services on EKS.
+
+I will provide you with a Statement of Work (SoW) document. Your tasks are:
+	1.	Analyze the SoW document thoroughly to extract all functional and non-functional requirements.
+	2.	Based on the requirements, design a complete high-level architecture that includes components for frontend, backend, data layer, authentication, CI/CD, monitoring, and infrastructure management. Ensure the design is both AWS-optimized and adaptable to other cloud providers.
+	3.	For each component in the architecture, specify the exact cloud services and tools you recommend using in an AWS context, and propose alternatives for a cloud-agnostic strategy.
+	4.  Create a web sequence diagram using mermaid.
+	5.  Create a architecture diagram with markdown approach (consider the HA and DR).
+	6.  create a table of aws services and also alternative to that with open source.
+	7.	Create a detailed work breakdown structure (WBS) for implementing the architecture. Break it down into major phases, tasks, and subtasks including design, setup, development, deployment, testing, and monitoring.
+	8.  create Jira stories with estimated time (break it for frontend and backend both where main entities are features, plan_items, plans then tenant will select plan and do payment via stripe).
+	9.  consider the tenant data we will save into vector db for analysis and create a chatbot for it, create a plan for that as well. 
+	10. create a unit test plan and integration test plan also.
+	11. Consider all the data in the database will be dynamic, and we have to draw ERD plus create all API for crud operation, so list down the apis end point and status code in table format.
+		below are the list of tables in my mind you can add as per your expertise, tables are 
+		tenants, features, plan_items, plans, invoices, subscriptions, billing_cycle, tenant_documents & their relation's table. create a table relation diagram also.
+	12.	Ensure the final output includes:
+	•	A visual or descriptive system architecture
+	•	A table of tasks and subtasks with brief descriptions
+	•	Mapping of services/technologies used per task
+	•	Any assumptions or prerequisites clearly stated
+	•   list down the unit test case title only for each module explained above.
+	•   The document should be fair enough to present to client, with all the possible diagrams and headings.
+	•   Create Image where ever possible.
+
+Take a deep breath and work on this problem step-by-step.

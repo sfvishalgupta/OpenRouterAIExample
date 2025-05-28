@@ -1,14 +1,15 @@
-
+import path from "path";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { StringOutputParser } from '@langchain/core/output_parsers';
-import { ChatOpenAI } from "@langchain/openai";
+import { chatOpenAIModel } from './models/chatOpenAIModel';
 
 import { ENV_VARIABLES } from "./environment";
 import { GetStore } from "./store/utils";
+import { getDocumentContent } from "./utils";
 
-const index_name = process.argv[2];
-const question = process.argv[3];
+const index_name = process.argv[2] ?? null;
+let question = process.argv[3] ?? null;
 
 if (!index_name || !question) {
     console.error("Usage: npx ts-node src/askQuestionFromVector.ts <index_name> <question>");
@@ -16,31 +17,26 @@ if (!index_name || !question) {
 }
 
 const run = async () => {
+    if (question.indexOf("prompts/") > -1) {
+        question = await getDocumentContent(path.join(
+            __dirname, question
+        ));
+    }
     const vectorStore = await GetStore().getStoreFromDocument(index_name);
 
     // 3. Run similarity search
     const retriever = vectorStore.asRetriever();
     const relevantDocs = await retriever.getRelevantDocuments(question);
     const context: string = relevantDocs.map((doc: any) => doc.pageContent).join("\n");
-
-    const parser = new StringOutputParser();
-    const model = new ChatOpenAI({
-        openAIApiKey: ENV_VARIABLES.OPEN_ROUTER_API_KEY,
-        modelName: ENV_VARIABLES.OPEN_ROUTER_MODEL,
-        configuration: {
-            baseURL: ENV_VARIABLES.OPEN_ROUTER_API_URL
-        },
-        temperature: 0,
-    });
-
     const prompt = PromptTemplate.fromTemplate(
-        question+"\n\n"+
-        "Your answer should be strictly based on the content given in <context></context>. if you dont find answer within the given context simply say answer not found."
+        question + "\n\n" +
+        "Your answer should be strictly based on the content given in <context></context>. if you don't find answer within the given context simply say answer not found."
     );
-    
+
     const chain = RunnableSequence.from([
         {
             context: () => {
+                console.log('<context>' + context + '</context>')
                 return '<context>' + context + '</context>';
             },
             question: () => {
@@ -48,8 +44,8 @@ const run = async () => {
             }
         },
         prompt,  // takes { topic } → prompt string
-        model,   // takes prompt → response
-        parser
+        chatOpenAIModel,   // takes prompt → response
+        new StringOutputParser()
     ]);
 
     if (ENV_VARIABLES.STREAMING) {

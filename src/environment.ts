@@ -1,6 +1,5 @@
 import dotenv from "dotenv";
-import path from "path";
-dotenv.config({ path: path.join(__dirname, '/.env') });
+dotenv.config({ path: './src/.env' });
 
 export const ENV_VARIABLES = {
     LOG_LEVEL: process.env.LOG_LEVEL ?? "info",
@@ -12,5 +11,10 @@ export const ENV_VARIABLES = {
     
     VECTOR_STORE_TYPE: process.env.VECTOR_STORE_TYPE ?? "memory",
     VECTOR_STORE_URL: process.env.VECTOR_STORE_URL ?? "http://localhost:6333",
+
+    JIRA_URL: process.env.JIRA_URL ?? "",
+    JIRA_EMAIL: process.env.JIRA_EMAIL ?? "",
+    JIRA_API_TOKEN: process.env.JIRA_API_TOKEN ?? "",
+    JIRA_PROJECT_KEY: process.env.JIRA_PROJECT_KEY ?? "",
 }
 
