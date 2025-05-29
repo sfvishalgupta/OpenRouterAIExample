@@ -17,8 +17,8 @@ export const JiraSearchTool = new DynamicTool({
                 Authorization: `Basic ${auth}`,
                 Accept: "application/json",
             },
-            params: { 
-                jql, 
+            params: {
+                jql,
                 maxResults: ENV_VARIABLES.JIRA_MAX_RESULT, // Default to 50 if not set
                 fields: ENV_VARIABLES.JIRA_FETCH_FIELDS // Fetch specific fields
             },
