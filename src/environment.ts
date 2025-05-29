@@ -1,5 +1,11 @@
 import dotenv from "dotenv";
-dotenv.config({ path: './src/.env' });
+import fs from "fs";
+
+if (fs.existsSync('./src/.env')) {
+    dotenv.config({ path: './src/.env' });
+} else {
+    dotenv.config({ path: '.env' });
+}
 
 export const ENV_VARIABLES = {
     LOG_LEVEL: process.env.LOG_LEVEL ?? "info",
@@ -8,7 +14,7 @@ export const ENV_VARIABLES = {
     OPEN_ROUTER_API_URL: process.env.OPEN_ROUTER_API_URL ?? "",
     OPENAI_API_KEY: process.env.OPENAI_API_KEY ?? "",
     STREAMING: process.env.STREAMING === "true",
-    
+
     VECTOR_STORE_TYPE: process.env.VECTOR_STORE_TYPE ?? "memory",
     VECTOR_STORE_URL: process.env.VECTOR_STORE_URL ?? "http://localhost:6333",
 
