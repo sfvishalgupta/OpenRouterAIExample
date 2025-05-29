@@ -20,11 +20,14 @@ export const JiraSearchTool = new DynamicTool({
             params: { jql, maxResults: 10 },
         });
 
-        console.log("Jira API Response:", res.data);
-
-        const issues = res.data.issues;
-        if (issues.length === 0) return "No issues found.";
-        const issue = issues[0];
-        return `Issue Key: ${issue.key}, Summary: ${issue.fields.summary}`;
+        return res.data.issues;
     },
 });
+
+JiraSearchTool.func("project = 'BMSAAS' AND (key = BMSAAS-19 OR parent = BMSAAS-19)").then((result) => {
+    console.log("Jira Search Result:", result);
+}
+).catch((error) => {
+    console.error("Error in Jira Search Tool:", error);
+}
+);

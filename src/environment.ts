@@ -16,5 +16,7 @@ export const ENV_VARIABLES = {
     JIRA_EMAIL: process.env.JIRA_EMAIL ?? "",
     JIRA_API_TOKEN: process.env.JIRA_API_TOKEN ?? "",
     JIRA_PROJECT_KEY: process.env.JIRA_PROJECT_KEY ?? "",
+    JIRA_MAX_RESULT: process.env.JIRA_MAX_RESULT ? parseInt(process.env.JIRA_MAX_RESULT) : 10,
+    JIRA_FETCH_FIELDS: process.env.JIRA_FETCH_FIELDS ? process.env.JIRA_FETCH_FIELDS.split(',') : ["summary", "status", "assignee", "reporter"],
 }
 
