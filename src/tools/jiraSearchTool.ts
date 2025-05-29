@@ -17,17 +17,13 @@ export const JiraSearchTool = new DynamicTool({
                 Authorization: `Basic ${auth}`,
                 Accept: "application/json",
             },
-            params: { jql, maxResults: 10 },
+            params: { 
+                jql, 
+                maxResults: ENV_VARIABLES.JIRA_MAX_RESULT, // Default to 50 if not set
+                fields: ENV_VARIABLES.JIRA_FETCH_FIELDS // Fetch specific fields
+            },
         });
 
         return res.data.issues;
     },
 });
-
-JiraSearchTool.func("project = 'BMSAAS' AND (key = BMSAAS-19 OR parent = BMSAAS-19)").then((result) => {
-    console.log("Jira Search Result:", result);
-}
-).catch((error) => {
-    console.error("Error in Jira Search Tool:", error);
-}
-);
