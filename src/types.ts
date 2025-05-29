@@ -15,3 +15,22 @@ export interface OpenRouterChoice {
 export interface OpenRouterMessage {
     content: string;
 }
+
+export interface PostRequest {
+    url: string;
+    headers: any;
+    body: any;
+    responseType: string
+}
+
+export interface BaseRequest {
+    getRequest(): Promise<PostRequest>;
+    parseResponse(response: any): string;
+}
+
+export interface ModelRequest {
+    url: string;
+    headers: any;
+    body: any;
+    responseType: string;
+} 

@@ -24,5 +24,10 @@ export const ENV_VARIABLES = {
     JIRA_PROJECT_KEY: process.env.JIRA_PROJECT_KEY ?? "",
     JIRA_MAX_RESULT: process.env.JIRA_MAX_RESULT ? parseInt(process.env.JIRA_MAX_RESULT) : 10,
     JIRA_FETCH_FIELDS: process.env.JIRA_FETCH_FIELDS ? process.env.JIRA_FETCH_FIELDS.split(',') : ["summary", "status", "assignee", "reporter"],
+
+    AI_PROVIDER: process.env.AI_PROVIDER ?? "OPEN_ROUTER_AI",
+
+    GEMINI_API_KEY: process.env.GEMINI_API_KEY ?? "",
+    GEMINI_API_URL: process.env.GEMINI_API_URL ?? "",
 }
 
