@@ -1,9 +1,8 @@
 import dotenv from "dotenv";
 import fs from "fs";
 
-if (fs.existsSync('./src/.env')) {
-    dotenv.config({ path: './src/.env' });
-} else {
+
+if (fs.existsSync('.env')) {
     dotenv.config({ path: '.env' });
 }
 
