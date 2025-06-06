@@ -5,4 +5,7 @@ dist
 .DS_Store
 .vscode
 *.log
-src/documents/*.pdf
+examples/
+documents/
+prompts/
+output/

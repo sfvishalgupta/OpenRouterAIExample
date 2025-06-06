@@ -1,5 +1,5 @@
-import path from "path";
 import fs from "fs";
+import path from "path";
 const pdf = require('pdf-parse');
 
 export const ReadPDFDocument = async (filePath: string): Promise<string> => {
@@ -11,7 +11,7 @@ export const ReadPDFDocument = async (filePath: string): Promise<string> => {
     throw new Error(`File not found: ${filePath}`);
 }
 
-const ReadTextDocument = async (filePath: string): Promise<string> => {
+export const ReadTextDocument = async (filePath: string): Promise<string> => {
     if (fs.existsSync(filePath)) {
         return fs.readFileSync(filePath, 'utf8');
     }
@@ -32,6 +32,5 @@ export const getDocumentContent = async (filePath: string): Promise<string> => {
         default:
             throw new Error(`Unsupported file type: ${fileExtension}`);
     }
-
     return content;
 }

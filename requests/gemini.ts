@@ -1,26 +1,37 @@
-import path from 'path';
 import { BaseRequest, ModelRequest } from '../types';
 import { ENV_VARIABLES } from '../environment';
-import { getDocumentContent } from "../utils";
-
 export class GeminiRequest implements BaseRequest {
-    constructor(private readonly document: string, private readonly question: string) { }
+    constructor(
+        private readonly question: string,
+        private readonly systemPrompt?: string,
+        private readonly document?: string,
+    ) { }
+
     parseResponse = (response: any): string => {
-        return response.data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        try {
+        return response.data.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error("Error parsing Gemini response:", error.message);
+            } else {
+                console.error("Error parsing Gemini response:", error);
+            }
+            return '';
+        }
     }
 
     getMessages = async (): Promise<any[]> => {
         const messages: any[] = [];
-        if (this.document.trim() !== "") {
+        if (this.systemPrompt?.trim() !== "") {
             messages.push({
                 role: 'user',
                 parts: [{
-                    text: await getDocumentContent(path.join(
-                        __dirname,
-                        '../prompts/read_project_file.txt'
-                    ))
+                    text: this.systemPrompt
                 }]
             });
+        }
+
+        if (this.document?.trim() !== "") {
             messages.push({
                 role: 'user',
                 parts: [{
@@ -28,6 +39,7 @@ export class GeminiRequest implements BaseRequest {
                 }]
             });
         }
+
         messages.push({
             role: 'user',
             parts: [{ text: `${this.question}\n\n` }]

@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "ts-node src/app.ts"
+    "start": "ts-node app.ts"
   },
   "repository": {
     "type": "git",

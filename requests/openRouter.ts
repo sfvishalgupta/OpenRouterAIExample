@@ -1,24 +1,34 @@
-import path from 'path';
 import { BaseRequest, ModelRequest } from '../types';
 import { ENV_VARIABLES } from '../environment';
-import { getDocumentContent } from "../utils";
-
 export class OpenRouterRequest implements BaseRequest {
-    constructor(private readonly document: string, private readonly question: string) { }
+    constructor(
+        private readonly question: string,
+        private readonly systemPrompt?: string,
+        private readonly document?: string,
+    ) { }
+
     parseResponse = (response: any): string => {
-        return response.data.choices[0].message.content ?? '';
+        try {
+            return response.data.choices[0].message.content ?? '';
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error("Error parsing OpenRouter response:", error.message);
+            } else {
+                console.error("Error parsing OpenRouter response:", error);
+            }
+            return '';
+        }
     }
 
     async getMessages(): Promise<any[]> {
         const messages: any[] = [];
-        if (this.document.trim() !== "") {
+        if (this.systemPrompt && this.systemPrompt?.trim() !== "") {
             messages.push({
                 role: 'system',
-                content: await getDocumentContent(path.join(
-                    __dirname,
-                    '../prompts/read_project_file.txt'
-                ))
+                content: this.systemPrompt
             });
+        }
+        if (this.document && this.document?.trim() !== "") {
             messages.push({
                 role: 'user',
                 content: `Here is the document:\n"""${this.document}"""\n\n`
@@ -40,8 +50,6 @@ export class OpenRouterRequest implements BaseRequest {
                 Authorization: `Bearer ${ENV_VARIABLES.OPEN_ROUTER_API_KEY}`,
                 'Content-Type': 'application/json',
                 'Accept': 'text/event-stream',
-                'HTTP-Referer': 'http://localhost', // optional but recommended
-                'X-Title': 'my-test-app' // optional but recommended
             },
             body: {
                 model: ENV_VARIABLES.OPEN_ROUTER_MODEL,
