@@ -1,5 +1,5 @@
 {
-  "name": "OpenRouterAIExample",
+  "name": "OpenRouterAICore",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sfvishalgupta/OpenRouterAIExample.git"
+    "url": "git+https://github.com/sfvishalgupta/OpenRouterAICore.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/sfvishalgupta/OpenRouterAIExample/issues"
+    "url": "https://github.com/sfvishalgupta/OpenRouterAICore/issues"
   },
-  "homepage": "https://github.com/sfvishalgupta/OpenRouterAIExample#readme",
+  "homepage": "https://github.com/sfvishalgupta/OpenRouterAICore#readme",
   "description": "",
   "dependencies": {
     "@huggingface/inference": "^2.8.1",
