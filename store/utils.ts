@@ -2,7 +2,6 @@ import { ENV_VARIABLES } from "../environment";
 import { VECTOR_STORE_TYPE } from "../constants";
 import { BaseVector } from "./baseVector";
 import { QdrantVector } from "./qdrantVector";
-import { MemoryVector } from "./memoryStore";
 import { logger } from "../pino";
 
 export const GetStore = (): BaseVector => {
@@ -11,5 +10,5 @@ export const GetStore = (): BaseVector => {
         return new QdrantVector();
     }
     logger.info("Using Memory Vector Store");
-    return new MemoryVector();
+    return new QdrantVector();
 }
