@@ -19,8 +19,27 @@ const DEFAULT_TOP_K = 5;
 const CHUNK_SIZE = 500;
 const CHUNK_OVERLAP = 50;
 
-export class QdrantVector implements BaseVector {
+const patterns: any = {
+    email: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,
+    phone: /(\+?\d{1,3}[-.\s]?|\()?\d{3}[-.\s)]?\d{3}[-.\s]?\d{4}/g,
+    ssn: /\b\d{3}-\d{2}-\d{4}\b/g,
+    ip: /\b\d{1,3}(\.\d{1,3}){3}\b/g,
+    creditCard: /\b(?:\d[ -]*?){13,16}\b/g,
+    jwtToken: /eyJ[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+/g
+};
 
+function redactPII(text: string): string {
+    for (const key in patterns) {
+        if (patterns[key].test(text)) {
+            logger.info(`PII Data Found:- ${key}`);
+            process.exit();
+        }
+        text = text.replace(patterns[key], `[REDACTED_${key.toUpperCase()}]`);
+    }
+    return text;
+}
+
+export class QdrantVector implements BaseVector {
     private getEmbeddings(): EmbeddingsInterface {
         // Replace FakeEmbeddings with actual embeddings in production
         return new FakeEmbeddings({});
@@ -104,9 +123,9 @@ export class QdrantVector implements BaseVector {
      * @param query 
      * @returns 
      */
-    public async generate(collectionName: string, query: string): Promise<string | AsyncIterable<string>> {
+    public async generate(modelName: string, collectionName: string, query: string): Promise<string | AsyncIterable<string>> {
         const retrievedDocuments = await this.retrieve(collectionName, query);
-        const context = retrievedDocuments.join(' ');
+        const context = redactPII(retrievedDocuments.join(' '));
 
         const prompt = PromptTemplate.fromTemplate(
             `Based on the following context: ${context}, answer the question: ${query}`
@@ -118,7 +137,7 @@ export class QdrantVector implements BaseVector {
                 question: () => query,
             },
             prompt,
-            ChatOpenAIModel,
+            ChatOpenAIModel(modelName),
             new StringOutputParser()
         ]);
 

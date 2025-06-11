@@ -22,11 +22,15 @@ export const ReadTextDocument = async (filePath: string): Promise<string> => {
 export const getDocumentContent = async (filePath: string): Promise<string> => {
     const fileExtension = path.extname(filePath).toLowerCase();
     let content = '';
+    if (!fs.existsSync(filePath)) {
+        throw new Error(`File not found: ${filePath}`);
+    }
     switch (fileExtension) {
         case '.pdf':
             content = await ReadPDFDocument(filePath);
             break;
         case '.txt':
+        case '.json':
             content = await ReadTextDocument(filePath);
             break;
         default:
