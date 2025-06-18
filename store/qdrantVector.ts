@@ -12,32 +12,14 @@ import { ChatOpenAIModel } from "../models/openAIModel";
 import { BaseVector } from "./baseVector";
 import { ENV_VARIABLES } from "../environment";
 import { logger } from "../pino";
+import { RedactPII } from '../utils';
+import { RemovePIIData } from '../services/PresidioService';
 
 const VECTOR_SIZE = 4;
 const VECTOR_DISTANCE = 'Cosine';
 const DEFAULT_TOP_K = 5;
 const CHUNK_SIZE = 500;
 const CHUNK_OVERLAP = 50;
-
-const patterns: any = {
-    email: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,
-    phone: /(\+?\d{1,3}[-.\s]?|\()?\d{3}[-.\s)]?\d{3}[-.\s]?\d{4}/g,
-    ssn: /\b\d{3}-\d{2}-\d{4}\b/g,
-    ip: /\b\d{1,3}(\.\d{1,3}){3}\b/g,
-    creditCard: /\b(?:\d[ -]*?){13,16}\b/g,
-    jwtToken: /eyJ[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+/g
-};
-
-function redactPII(text: string): string {
-    for (const key in patterns) {
-        if (patterns[key].test(text)) {
-            logger.info(`PII Data Found:- ${key}`);
-            process.exit();
-        }
-        text = text.replace(patterns[key], `[REDACTED_${key.toUpperCase()}]`);
-    }
-    return text;
-}
 
 export class QdrantVector implements BaseVector {
     private getEmbeddings(): EmbeddingsInterface {
@@ -50,18 +32,13 @@ export class QdrantVector implements BaseVector {
     }
 
     private async ensureCollection(client: QdrantClient, collectionName: string): Promise<void> {
-        try {
-            await client.recreateCollection(collectionName, {
-                vectors: {
-                    size: VECTOR_SIZE,
-                    distance: VECTOR_DISTANCE,
-                },
-            });
-            logger.info(`Collection '${collectionName}' recreated.`);
-        } catch (error) {
-            logger.error(`Failed to recreate collection '${collectionName}': ${error}`);
-            throw error;
-        }
+        await client.recreateCollection(collectionName, {
+            vectors: {
+                size: VECTOR_SIZE,
+                distance: VECTOR_DISTANCE,
+            },
+        });
+        logger.info(`Collection '${collectionName}' recreated.`);
     }
 
     private async getVectorStore(collectionName: string): Promise<QdrantVectorStore> {
@@ -104,17 +81,10 @@ export class QdrantVector implements BaseVector {
             chunkSize: CHUNK_SIZE,
             chunkOverlap: CHUNK_OVERLAP,
         });
-
-        const docs: Document[] = await splitter.createDocuments([text]);
         const vectorStore = await this.getVectorStore(collectionName);
-
-        try {
-            await vectorStore.addDocuments(docs);
-            logger.info(`Added ${docs.length} documents to '${collectionName}'.`);
-        } catch (error) {
-            logger.error(`Failed to add documents to '${collectionName}': ${error}`);
-            throw error;
-        }
+        text = RedactPII(text);
+        const docs: Document[] = await splitter.createDocuments([text]);
+        await vectorStore.addDocuments(docs);
     }
 
     /**
@@ -125,8 +95,12 @@ export class QdrantVector implements BaseVector {
      */
     public async generate(modelName: string, collectionName: string, query: string): Promise<string | AsyncIterable<string>> {
         const retrievedDocuments = await this.retrieve(collectionName, query);
-        const context = redactPII(retrievedDocuments.join(' '));
-
+        let context = "";
+        for(const txt of retrievedDocuments){
+            context += await RemovePIIData(txt);
+        }
+        
+        logger.info(`Length of a context is ${context.length}`);
         const prompt = PromptTemplate.fromTemplate(
             `Based on the following context: ${context}, answer the question: ${query}`
         );

@@ -1,9 +1,12 @@
-import dotenv from "dotenv";
+import { config } from "dotenv";
 import fs from "fs";
 
-
 if (fs.existsSync('.env')) {
-    dotenv.config({ path: '.env' });
+    config({ path: '.env' });
+}
+
+if (process.env.NODE_ENV != "" && fs.existsSync(`.env.${process.env.NODE_ENV}`)) {
+    config({ path: `.env.${process.env.NODE_ENV}` });
 }
 
 export const ENV_VARIABLES = {
@@ -28,5 +31,13 @@ export const ENV_VARIABLES = {
 
     GEMINI_API_KEY: process.env.GEMINI_API_KEY ?? "",
     GEMINI_API_URL: process.env.GEMINI_API_URL ?? "",
+
+    AWS_ACCESS_KEY: process.env.AWS_ACCESS_KEY ?? "",
+    AWS_SECRET_KEY: process.env.AWS_SECRET_KEY ?? "",
+    AWS_REGION: process.env.AWS_REGION ?? "",
+    S3_BUCKET_NAME: process.env.S3_BUCKET_NAME ?? "",
+
+    PRESIDIO_ANALYZE_URL: process.env.PRESIDIO_ANALYZE_URL ?? "",
+    PRESIDIO_ANONYMIZE_URL: process.env.PRESIDIO_ANONYMIZE_URL ?? ""
 }
 
